@@ -1,0 +1,17 @@
+# Maven
+target/
+.mvn/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Node (si hay frontend en el monorepo)
+node_modules/

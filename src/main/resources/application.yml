@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:smartmarket;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+
+server:
+  port: 8080
+  # Para HTTPS en despliegue, configurar un keystore
+  # ssl:
+  #   enabled: true
+  #   key-store: classpath:keystore.p12
+  #   key-store-password: changeme
+  #   key-store-type: PKCS12
+  #   key-alias: smartmarket
+
+jwt:
+  # Usa env `JWT_SECRET`; por defecto clave dev base64 (cambiar en prod)
+  secret: ${JWT_SECRET:ZmFrZV9kZXYtc2VjcmV0LXNwcmluZy1ib290LTM=}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+python:
+  service:
+    base-url: ${PY_SERVICE_BASE_URL:http://localhost:8001}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  endpoint:
+    health:
+      show-details: when_authorized
+
+logging:
+  level:
+    root: INFO
+    com.smartmarket.backend: INFO
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
