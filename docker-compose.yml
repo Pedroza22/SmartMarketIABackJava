@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    image: smartmarket-backend:dev
+    container_name: smartmarket-backend
+    ports:
+      - "8080:8080"
+    environment:
+      PY_SERVICE_BASE_URL: http://pyservice:8001
+      CORS_ALLOWED_ORIGINS: http://localhost:5173,http://localhost:3000
+      JWT_SECRET: ZmFrZV9kZXYtc2VjcmV0LXNwcmluZy1ib290LTM=
+    depends_on:
+      - pyservice
+
+  pyservice:
+    build: ./pyservice
+    image: smartmarket-pyservice:dev
+    container_name: smartmarket-pyservice
+    ports:
+      - "8001:8001"
