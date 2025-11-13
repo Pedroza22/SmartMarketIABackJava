@@ -6,6 +6,8 @@ import com.smartmarket.backend.web.dto.AuthResponse;
 import com.smartmarket.backend.web.dto.LoginRequest;
 import com.smartmarket.backend.web.dto.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -25,6 +27,11 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Registrar usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "400"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         User user = authService.register(request.getUsername(), request.getEmail(), request.getPassword());
         return ResponseEntity.ok(user);
@@ -32,6 +39,12 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Login de usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "400"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         String token = authService.login(request.getUsername(), request.getPassword());
         User user = authService.getByUsername(request.getUsername());

@@ -7,6 +7,8 @@ import com.smartmarket.backend.repository.AnalysisRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +41,12 @@ public class HealthController {
 
     @GetMapping
     @Operation(summary = "Estado DB", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<Map<String, Object>> status() {
         Map<String, Object> m = new HashMap<>();
         m.put("db", "up");

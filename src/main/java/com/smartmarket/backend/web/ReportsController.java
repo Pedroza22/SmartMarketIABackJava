@@ -12,6 +12,8 @@ import com.lowagie.text.pdf.PdfWriter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -44,6 +46,12 @@ public class ReportsController {
 
     @GetMapping(value = "/scraping.csv", produces = "text/csv")
     @Operation(summary = "Exportar scraping en CSV", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<byte[]> scrapingCsv() {
         List<ScrapingResult> data = scrapingRepository.findAll();
         StringBuilder sb = new StringBuilder();
@@ -67,6 +75,12 @@ public class ReportsController {
 
     @GetMapping(value = "/analyses.csv", produces = "text/csv")
     @Operation(summary = "Exportar analyses en CSV", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<byte[]> analysesCsv() {
         List<Analysis> data = analysisRepository.findAll();
         StringBuilder sb = new StringBuilder();
@@ -92,6 +106,12 @@ public class ReportsController {
 
     @GetMapping(value = "/scraping.xlsx")
     @Operation(summary = "Exportar scraping en XLSX", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<byte[]> scrapingXlsx() {
         List<ScrapingResult> data = scrapingRepository.findAll();
         try (Workbook wb = new XSSFWorkbook(); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -123,6 +143,12 @@ public class ReportsController {
 
     @GetMapping(value = "/analyses.xlsx")
     @Operation(summary = "Exportar analyses en XLSX", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<byte[]> analysesXlsx() {
         List<Analysis> data = analysisRepository.findAll();
         try (Workbook wb = new XSSFWorkbook(); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -156,6 +182,12 @@ public class ReportsController {
 
     @GetMapping(value = "/scraping.pdf")
     @Operation(summary = "Exportar scraping en PDF", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<byte[]> scrapingPdf() {
         List<ScrapingResult> data = scrapingRepository.findAll();
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -189,6 +221,12 @@ public class ReportsController {
 
     @GetMapping(value = "/analyses.pdf")
     @Operation(summary = "Exportar analyses en PDF", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<byte[]> analysesPdf() {
         List<Analysis> data = analysisRepository.findAll();
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {

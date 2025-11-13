@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,14 +28,23 @@ public class ScrapingController {
 
     @PostMapping("/ml/{mlId}")
     @Operation(summary = "Scraping Mercado Libre", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponse(responseCode = "200")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<ScrapingResult> scrapeMl(Authentication auth, @PathVariable String mlId) {
         return ResponseEntity.ok(scrapingService.scrapeMl(auth.getName(), mlId));
     }
 
     @PostMapping("/generic")
     @Operation(summary = "Scraping genérico por URL", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponse(responseCode = "200")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "400"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<ScrapingResult> scrapeGeneric(Authentication auth,
                                                        @Valid @RequestBody ScrapeGenericRequest request) {
         return ResponseEntity.ok(scrapingService.scrapeGeneric(auth.getName(), request.getUrl()));
@@ -42,7 +52,11 @@ public class ScrapingController {
 
     @GetMapping("/me")
     @Operation(summary = "Listar scraping del usuario", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponse(responseCode = "200")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<List<ScrapingResult>> myScrapes(Authentication auth) {
         return ResponseEntity.ok(scrapingService.listForUser(auth.getName()));
     }
@@ -50,7 +64,12 @@ public class ScrapingController {
     @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Listar scraping global", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponse(responseCode = "200")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(responseCode = "401"),
+        @ApiResponse(responseCode = "403"),
+        @ApiResponse(responseCode = "500")
+    })
     public ResponseEntity<List<ScrapingResult>> all() {
         return ResponseEntity.ok(scrapingService.listAll());
     }
