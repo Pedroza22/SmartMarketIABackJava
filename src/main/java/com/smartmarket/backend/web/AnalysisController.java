@@ -1,18 +1,24 @@
 package com.smartmarket.backend.web;
 
-import com.smartmarket.backend.model.Analysis;
-import com.smartmarket.backend.service.AnalysisService;
-import com.smartmarket.backend.web.dto.AnalysisRequest;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.smartmarket.backend.model.Analysis;
+import com.smartmarket.backend.service.AnalysisService;
+import com.smartmarket.backend.web.dto.AnalysisRequest;
+
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/analyses")
+@RequestMapping("/api/v1/analyses")
 public class AnalysisController {
     private final AnalysisService analysisService;
 

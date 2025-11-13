@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subscriptions")
+@RequestMapping("/api/v1/subscriptions")
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
     private final UserRepository userRepository;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/v1/products")
 public class ProductController {
     private final ProductService productService;
 
@@ -31,6 +31,8 @@ public class ProductController {
         p.setName(request.getName());
         p.setDescription(request.getDescription());
         p.setPrice(request.getPrice());
+        p.setPlatform(request.getPlatform());
+        p.setMlId(request.getMlId());
         return ResponseEntity.ok(productService.create(p));
     }
 
@@ -41,6 +43,8 @@ public class ProductController {
         p.setName(request.getName());
         p.setDescription(request.getDescription());
         p.setPrice(request.getPrice());
+        p.setPlatform(request.getPlatform());
+        p.setMlId(request.getMlId());
         return ResponseEntity.ok(productService.update(id, p));
     }
 

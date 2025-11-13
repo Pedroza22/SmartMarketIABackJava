@@ -1,20 +1,21 @@
 package com.smartmarket.backend.web;
 
-import com.smartmarket.backend.repository.AnalysisRepository;
-import com.smartmarket.backend.repository.ProductRepository;
-import com.smartmarket.backend.repository.SubscriptionRepository;
-import com.smartmarket.backend.repository.UserRepository;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.smartmarket.backend.repository.AnalysisRepository;
+import com.smartmarket.backend.repository.ProductRepository;
+import com.smartmarket.backend.repository.SubscriptionRepository;
+import com.smartmarket.backend.repository.UserRepository;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/v1/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 

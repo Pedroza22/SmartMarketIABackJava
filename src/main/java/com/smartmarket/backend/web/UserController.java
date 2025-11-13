@@ -1,6 +1,7 @@
 package com.smartmarket.backend.web;
 
 import com.smartmarket.backend.repository.UserRepository;
+import com.smartmarket.backend.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final UserRepository userRepository;
 
@@ -17,8 +18,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> me(Authentication auth) {
-        var user = userRepository.findByUsername(auth.getName()).orElseThrow();
+
+    public ResponseEntity<User> me(Authentication auth) {
+        User user = userRepository.findByUsername(auth.getName()).orElseThrow();
         return ResponseEntity.ok(user);
     }
 }
