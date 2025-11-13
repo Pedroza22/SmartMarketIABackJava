@@ -46,7 +46,8 @@ public class ScrapingService {
         } catch (JsonProcessingException e) {
             sr.setResultJson("{\"error\":\"serialization\"}");
         }
-        return scrapingRepository.save(sr);
+        ScrapingResult saved = scrapingRepository.save(sr);
+        return saved;
     }
 
     public ScrapingResult scrapeGeneric(String username, String url) {
@@ -63,7 +64,8 @@ public class ScrapingService {
         } catch (JsonProcessingException e) {
             sr.setResultJson("{\"error\":\"serialization\"}");
         }
-        return scrapingRepository.save(sr);
+        ScrapingResult saved = scrapingRepository.save(sr);
+        return saved;
     }
 
     public List<ScrapingResult> listForUser(String username) {

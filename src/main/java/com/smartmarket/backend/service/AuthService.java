@@ -19,13 +19,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final AuditService auditService;
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil,
-                       AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager, AuditService auditService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.auditService = auditService;
     }
 
     public User register(String username, String email, String rawPassword) {
@@ -40,7 +42,9 @@ public class AuthService {
         user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(rawPassword));
         user.setRole(UserRole.USER);
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        auditService.record(user.getUsername(), "register", "user", "SUCCESS", "user_registered");
+        return saved;
     }
 
     public String login(String username, String password) {
@@ -48,6 +52,7 @@ public class AuthService {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
             authenticationManager.authenticate(authToken);
         } catch (Exception e) {
+            auditService.record(username, "login", "user", "FAILED", "bad_credentials");
             throw new BadCredentialsException("Credenciales inválidas");
         }
 
@@ -55,7 +60,9 @@ public class AuthService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", user.getRole().name());
         claims.put("uid", user.getId());
-        return jwtUtil.generateToken(user.getUsername(), claims);
+        String token = jwtUtil.generateToken(user.getUsername(), claims);
+        auditService.record(username, "login", "user", "SUCCESS", "user_logged_in");
+        return token;
     }
 
     public User getByUsername(String username) {
