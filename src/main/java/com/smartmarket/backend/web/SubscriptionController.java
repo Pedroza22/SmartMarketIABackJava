@@ -5,6 +5,9 @@ import com.smartmarket.backend.model.User;
 import com.smartmarket.backend.repository.UserRepository;
 import com.smartmarket.backend.service.SubscriptionService;
 import com.smartmarket.backend.web.dto.SubscriptionRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/subscriptions")
+@Tag(name = "Subscriptions")
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
     private final UserRepository userRepository;
@@ -24,6 +28,7 @@ public class SubscriptionController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear suscripción", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Subscription> create(Authentication auth, @Valid @RequestBody SubscriptionRequest request) {
         User user = userRepository.findByUsername(auth.getName()).orElseThrow();
         Subscription s = new Subscription();
@@ -34,6 +39,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Listar suscripciones del usuario", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<Subscription>> listMy(Authentication auth) {
         User user = userRepository.findByUsername(auth.getName()).orElseThrow();
         return ResponseEntity.ok(subscriptionService.listByUser(user));

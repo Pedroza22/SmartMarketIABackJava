@@ -14,9 +14,14 @@ import com.smartmarket.backend.repository.ProductRepository;
 import com.smartmarket.backend.repository.SubscriptionRepository;
 import com.smartmarket.backend.repository.UserRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/admin")
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Admin")
 public class AdminController {
 
     private final UserRepository userRepository;
@@ -33,6 +38,7 @@ public class AdminController {
     }
 
     @GetMapping("/metrics")
+    @Operation(summary = "Métricas", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Map<String, Object>> metrics() {
         Map<String, Object> m = new HashMap<>();
         m.put("users", userRepository.count());
