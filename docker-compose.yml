@@ -1,6 +1,29 @@
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:16
+    container_name: smartmarket-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 221102
+      POSTGRES_DB: smartmarket
+    ports:
+      - "5433:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: smartmarket-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: julianpedrozaospina@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 221102
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgres
+
   backend:
     build: .
     image: smartmarket-backend:dev
@@ -10,9 +33,15 @@ services:
     environment:
       PY_SERVICE_BASE_URL: http://pyservice:8001
       CORS_ALLOWED_ORIGINS: http://localhost:5173,http://localhost:3000
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/smartmarket
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 221102
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
       JWT_SECRET: ZmFrZV9kZXYtc2VjcmV0LXNwcmluZy1ib290LTM=
     depends_on:
       - pyservice
+      - postgres
 
   pyservice:
     build: ./pyservice
