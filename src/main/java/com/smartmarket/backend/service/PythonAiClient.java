@@ -63,4 +63,41 @@ public class PythonAiClient {
         log.error("python_error action=ml_sync error={} mlId={}", t.toString(), mlId);
         return Map.of("status", "error", "message", "Python service unavailable", "mlId", mlId);
     }
+
+    @Retryable(maxAttempts = 3, backoff = @Backoff(delay = 500))
+    @CircuitBreaker(name = "pythonService", fallbackMethod = "onScrapeMlFailure")
+    @RateLimiter(name = "pythonService")
+    public Map<String, Object> scrapeMl(String mlId) {
+        String url = baseUrl + "/api/ml/scrape/" + mlId;
+        long start = System.currentTimeMillis();
+        log.info("python_request action=scrape_ml url={}", url);
+        Map<String, Object> response = restTemplate.postForObject(url, Map.of(), Map.class);
+        long duration = System.currentTimeMillis() - start;
+        log.info("python_response action=scrape_ml duration_ms={} response={}", duration, response);
+        return response;
+    }
+
+    public Map<String, Object> onScrapeMlFailure(Throwable t, String mlId) {
+        log.error("python_error action=scrape_ml error={} mlId={}", t.toString(), mlId);
+        return Map.of("status", "error", "message", "Python service unavailable", "mlId", mlId);
+    }
+
+    @Retryable(maxAttempts = 3, backoff = @Backoff(delay = 500))
+    @CircuitBreaker(name = "pythonService", fallbackMethod = "onScrapeGenericFailure")
+    @RateLimiter(name = "pythonService")
+    public Map<String, Object> scrapeGeneric(String url) {
+        String endpoint = baseUrl + "/api/generic/scrape";
+        long start = System.currentTimeMillis();
+        log.info("python_request action=scrape_generic endpoint={} url={}", endpoint, url);
+        Map<String, Object> payload = Map.of("url", url);
+        Map<String, Object> response = restTemplate.postForObject(endpoint, payload, Map.class);
+        long duration = System.currentTimeMillis() - start;
+        log.info("python_response action=scrape_generic duration_ms={} response={}", duration, response);
+        return response;
+    }
+
+    public Map<String, Object> onScrapeGenericFailure(Throwable t, String url) {
+        log.error("python_error action=scrape_generic error={} url={}", t.toString(), url);
+        return Map.of("status", "error", "message", "Python service unavailable", "url", url);
+    }
 }
