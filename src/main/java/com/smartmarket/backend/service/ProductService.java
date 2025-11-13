@@ -27,6 +27,8 @@ public class ProductService {
         p.setName(updated.getName());
         p.setDescription(updated.getDescription());
         p.setPrice(updated.getPrice());
+        p.setPlatform(updated.getPlatform());
+        p.setMlId(updated.getMlId());
         return productRepository.save(p);
     }
 

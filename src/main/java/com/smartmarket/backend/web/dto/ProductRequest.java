@@ -10,6 +10,8 @@ public class ProductRequest {
     private String description;
     @NotNull
     private BigDecimal price;
+    private String platform;
+    private String mlId;
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -17,4 +19,8 @@ public class ProductRequest {
     public void setDescription(String description) { this.description = description; }
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) { this.price = price; }
+    public String getPlatform() { return platform; }
+    public void setPlatform(String platform) { this.platform = platform; }
+    public String getMlId() { return mlId; }
+    public void setMlId(String mlId) { this.mlId = mlId; }
 }

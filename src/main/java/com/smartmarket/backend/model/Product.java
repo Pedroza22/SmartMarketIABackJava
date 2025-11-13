@@ -23,6 +23,12 @@ public class Product {
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
 
+    @Column(length = 50)
+    private String platform; // e.g., ML, GENERIC
+
+    @Column(length = 80)
+    private String mlId; // identificador de Mercado Libre
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
@@ -33,4 +39,8 @@ public class Product {
     public void setPrice(BigDecimal price) { this.price = price; }
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+    public String getPlatform() { return platform; }
+    public void setPlatform(String platform) { this.platform = platform; }
+    public String getMlId() { return mlId; }
+    public void setMlId(String mlId) { this.mlId = mlId; }
 }
