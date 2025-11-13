@@ -1,0 +1,41 @@
+name: Deploy to Railway
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.RAILWAY_TOKEN != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+
+      - name: Link Railway project
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway login --token "$RAILWAY_TOKEN"
+          if [ -n "${{ secrets.RAILWAY_PROJECT_ID }}" ]; then
+            railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          fi
+          if [ -n "${{ secrets.RAILWAY_ENV }}" ]; then
+            railway environment ${{ secrets.RAILWAY_ENV }}
+          fi
+
+      - name: Trigger deploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway up --detached
+
