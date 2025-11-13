@@ -3,6 +3,10 @@ package com.smartmarket.backend.web;
 import com.smartmarket.backend.model.ScrapingResult;
 import com.smartmarket.backend.service.ScrapingService;
 import com.smartmarket.backend.web.dto.ScrapeGenericRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/scraping")
+@Tag(name = "Scraping")
 public class ScrapingController {
     private final ScrapingService scrapingService;
 
@@ -21,23 +26,31 @@ public class ScrapingController {
     }
 
     @PostMapping("/ml/{mlId}")
+    @Operation(summary = "Scraping Mercado Libre", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "200")
     public ResponseEntity<ScrapingResult> scrapeMl(Authentication auth, @PathVariable String mlId) {
         return ResponseEntity.ok(scrapingService.scrapeMl(auth.getName(), mlId));
     }
 
     @PostMapping("/generic")
+    @Operation(summary = "Scraping genérico por URL", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "200")
     public ResponseEntity<ScrapingResult> scrapeGeneric(Authentication auth,
                                                        @Valid @RequestBody ScrapeGenericRequest request) {
         return ResponseEntity.ok(scrapingService.scrapeGeneric(auth.getName(), request.getUrl()));
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Listar scraping del usuario", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "200")
     public ResponseEntity<List<ScrapingResult>> myScrapes(Authentication auth) {
         return ResponseEntity.ok(scrapingService.listForUser(auth.getName()));
     }
 
     @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Listar scraping global", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "200")
     public ResponseEntity<List<ScrapingResult>> all() {
         return ResponseEntity.ok(scrapingService.listAll());
     }

@@ -4,6 +4,9 @@ import com.smartmarket.backend.repository.UserRepository;
 import com.smartmarket.backend.repository.ProductRepository;
 import com.smartmarket.backend.repository.SubscriptionRepository;
 import com.smartmarket.backend.repository.AnalysisRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/db-status")
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Health")
 public class HealthController {
 
     private final UserRepository userRepository;
@@ -34,6 +38,7 @@ public class HealthController {
     }
 
     @GetMapping
+    @Operation(summary = "Estado DB", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Map<String, Object>> status() {
         Map<String, Object> m = new HashMap<>();
         m.put("db", "up");
