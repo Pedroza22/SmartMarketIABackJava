@@ -17,8 +17,8 @@ services:
     container_name: smartmarket-pgadmin
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: julianpedrozaospina@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: 221102
+      PGADMIN_DEFAULT_EMAIL: "julianpedrozaospina@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "221102"
     ports:
       - "8081:80"
     depends_on:
