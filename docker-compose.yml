@@ -20,7 +20,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: "julianpedrozaospina@gmail.com"
       PGADMIN_DEFAULT_PASSWORD: "221102"
     ports:
-      - "127.0.0.1:8081:80"
+      - "0.0.0.0:80:80"
     volumes:
       - ./pgadmin-data:/var/lib/pgadmin
     depends_on:
